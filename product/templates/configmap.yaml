@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-configmap
+data:
+  application-{{ .Values.env.profiles }}.yaml: |
+    server:
+      port: {{ .Values.service.port }}
+
+    spring:
+      kafka:
+        listener:
+          ack-mode: {{ .Values.spring.kafka.listener.ackMode }}
+        producer:
+          key-serializer: {{ .Values.spring.kafka.producer.keySerializer }}
+          value-serializer: {{ .Values.spring.kafka.producer.valueSerializer }}
+          properties:
+            spring.json.add.type.headers: {{ .Values.spring.kafka.producer.properties.springJsonAddTypeHeaders }}
+      data:
+        mongodb:
+          host: {{ .Values.spring.data.mongodb.host }}
+          port: {{ .Values.spring.data.mongodb.port }}
+          database: {{ .Values.spring.data.mongodb.database }}
+          authentication-database: {{ .Values.spring.data.mongodb.authenticationDatabase }}
+      cloud:
+        compatibility-verifier:
+          enabled: {{ .Values.spring.cloud.compatibilityVerifier.enabled }}
+      servlet:
+        multipart:
+          max-file-size: {{ .Values.spring.servlet.multipart.maxFileSize }}
+          max-request-size: {{ .Values.spring.servlet.multipart.maxRequestSize }}
+    
+    asset:
+      base-url: {{ .Values.asset.baseUrl }}
+
+    escrow:
+      base-url: {{ .Values.escrow.baseUrl }}
+
+    smartContract:
+      base-url: {{ .Values.smartContract.baseUrl }}
+
+    market:
+      base-url: {{ .Values.market.baseUrl }}
+
+    cloud:
+      aws:
+        region:
+          static: {{ .Values.cloud.aws.region.static }}
+        s3:
+          bucket: {{ .Values.cloud.aws.s3.bucket }}

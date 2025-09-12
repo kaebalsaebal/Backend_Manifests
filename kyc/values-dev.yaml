@@ -1,0 +1,36 @@
+replicaCount: 1
+image:
+  repository: (censored):5000/backend_kyc
+  tag: "0.4.1"
+  pullPolicy: Always
+service:
+  port: 8088
+containerPort: 8088
+env:
+  profiles: dev
+spring:
+  datasource:
+    url: jdbc:mariadb://(censored):3306/kyc?serverTimezone=UTC&characterEncoding=UTF-8
+    username: admin
+    password: admin
+    driverClassName: org.mariadb.jdbc.Driver
+    hikari:
+      connectionTestQuery: SELECT 1
+      validationTimeout: 5000
+  jpa:
+    hibernate:
+      ddlAuto: none
+    generateDdl: true
+    showSql: true
+    openInView: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
+  kafka:
+    producer:
+      boostrapServers: (censored):9092
+apick:
+  baseUrl: https://apick.app
+  authKey: (censored)
+user:
+  baseUrl: http://backend-user-service:8081

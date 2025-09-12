@@ -1,0 +1,56 @@
+replicaCount: 1
+image:
+  repository: (censored).dkr.ecr.ap-northeast-2.amazonaws.com/backend_market
+  tag: "0.19.9"
+  pullPolicy: Always
+service:
+  port: 8086
+containerPort: 8086
+env:
+  profiles: prod
+spring:
+  kafka:
+    listener:
+      ackMode: manual_immediate
+    consumer:
+      keyDeserializer: org.apache.kafka.common.serialization.StringDeserializer
+      valueDeserializer: org.apache.kafka.common.serialization.StringDeserializer
+      enableAutoCommit: false
+      autoOffsetReset: latest
+      maxPollRecords: 10
+      properties:
+        springJsonTrustedPackages: \"*\"
+        springJsonUseTypeHeaders: false
+    producer:
+      keySerializer: org.apache.kafka.common.serialization.StringSerializer
+      valueSerializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        springJsonAddTypeHeaders: false
+    bootstrapServers: (censored):9092 # Kafka URL
+  datasource:
+    url: jdbc:mariadb://cloud-rds.(censored).ap-northeast-2.rds.amazonaws.com:3306/market?serverTimezone=UTC&characterEncoding=UTF-8
+    username: admin
+    password: admin123!
+    driverClassName: org.mariadb.jdbc.Driver
+    hikari:
+      connectionTestQuery: SELECT 1
+      validationTimeout: 5000
+  jpa:
+    hibernate:
+      ddlAuto: none
+    generateDdl: true
+    showSql: true
+    openInView: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
+user:
+  baseUrl: http://backend-user-service:8081
+asset:
+  baseUrl: http://backend-asset-service:8082
+product:
+  baseUrl: http://backend-product-service:8083
+blockchain:
+  baseUrl: http://backend-blockchain-connector-service:8085
+escrow:
+  baseUrl: http://backend-escrow-service:8084

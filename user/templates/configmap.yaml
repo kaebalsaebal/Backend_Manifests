@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-configmap
+data:
+  application-{{ .Values.env.profiles }}.yaml: |
+    server:
+      port: {{ .Values.service.port }}
+
+    spring:
+      datasource:
+        url: {{ .Values.spring.datasource.url }}
+        driver-class-name: {{ .Values.spring.datasource.driverClassName }}
+        hikari:
+          connection-test-query: {{ .Values.spring.datasource.hikari.connectionTestQuery }}
+          validation-timeout: {{ .Values.spring.datasource.hikari.validationTimeout }}
+      jpa:
+        hibernate:
+          ddl-auto: {{ .Values.spring.jpa.hibernate.ddlAuto }}
+        database-platform: {{ .Values.spring.jpa.databasePlatform }}
+        generate-ddl: {{ .Values.spring.jpa.generateDdl }}
+        show-sql: {{ .Values.spring.jpa.showSql }}
+        open-in-view: {{ .Values.spring.jpa.openInView }}
+      kafka:
+        bootstrap-servers: {{ .Values.spring.kafka.boostrapServers }}
+      kakao:
+        redirect-uri: {{ .Values.spring.kakao.redirectUri }}
+        scope: {{ .Values.spring.kakao.scope }}
+      cloud:
+        compatibility-verifier:
+          enabled: {{ .Values.spring.cloud.compatibilityVerifier.enabled }}
+      data:
+        redis:
+          host: {{ .Values.spring.data.redis.host }}
+          port: {{ .Values.spring.data.redis.port }}
+    jwt:
+      expires-in: {{ .Values.jwt.expiresIn }}
+      mobile-expires-in: {{ .Values.jwt.mobileExpiresIn }}
+      tablet-expires-in: {{ .Values.jwt.tabletExpiresIn }}
+    product:
+      base-url: {{ .Values.product.baseUrl }}

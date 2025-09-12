@@ -1,0 +1,41 @@
+replicaCount: 1
+image:
+  repository: (censored).dkr.ecr.ap-northeast-2.amazonaws.com/backend_notification
+  tag: "0.3.5"
+  pullPolicy: Always
+service:
+  port: 8087
+containerPort: 8087
+env:
+  profiles: prod
+spring:
+  datasource:
+    url: jdbc:mariadb://cloud-rds.(censored).ap-northeast-2.rds.amazonaws.com:3306/notification?serverTimezone=UTC&characterEncoding=UTF-8
+    username: admin
+    password: admin123!
+    driverClassName: org.mariadb.jdbc.Driver
+    hikari:
+      connectionTestQuery: SELECT 1
+      validationTimeout: 5000
+  jpa:
+    hibernate:
+      ddlAuto: none
+    generateDdl: true
+    showSql: true
+    openInView: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
+  kafka:
+    listener:
+      ackMode: manual_immediate
+    consumer:
+      keyDeserializer: org.apache.kafka.common.serialization.StringDeserializer
+      valueDeserializer: org.apache.kafka.common.serialization.StringDeserializer
+      enableAutoCommit: false
+      autoOffsetReset: latest
+      maxPollRecords: 10
+      properties:
+        springJsonTrustedPackages: \"*\"
+        springJsonUseTypeHeaders: false
+    bootstrapServers: (censored):9092 # Kafka URL

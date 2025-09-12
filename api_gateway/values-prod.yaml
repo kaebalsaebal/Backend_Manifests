@@ -1,0 +1,13 @@
+replicaCount: 1
+image:
+  repository: (censored).dkr.ecr.ap-northeast-2.amazonaws.com/api_gateway
+  tag: "0.3.5"
+  pullPolicy: Always
+service:
+  type: ClusterIP
+  port: 8080
+containerPort: 8080
+env:
+  profiles: prod
+jwt:
+  secretKey: (censored)

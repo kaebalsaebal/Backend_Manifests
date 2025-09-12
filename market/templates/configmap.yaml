@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-configmap
+data:
+  application-{{ .Values.env.profiles }}.yaml: |
+    server:
+      port: {{ .Values.service.port }}
+
+    spring:
+      kafka:
+        listener:
+          ack-mode: {{ .Values.spring.kafka.listener.ackMode }}
+        consumer:
+          group-id: {{ .Chart.Name }}
+          key-deserializer: {{ .Values.spring.kafka.consumer.keyDeserializer }}
+          value-deserializer: {{ .Values.spring.kafka.consumer.valueDeserializer }}
+          enable-auto-commit: {{ .Values.spring.kafka.consumer.enableAutoCommit }}
+          auto-offset-reset: {{ .Values.spring.kafka.consumer.autoOffsetReset }}
+          max-poll-records: {{ .Values.spring.kafka.consumer.maxPollRecords }}
+          properties:
+            spring.json.trusted.packages: {{ .Values.spring.kafka.consumer.properties.springJsonTrustedPackages }}
+            spring.json.use.type.headers: {{ .Values.spring.kafka.consumer.properties.springJsonUseTypeHeaders }}
+        producer:
+          key-serializer: {{ .Values.spring.kafka.producer.keySerializer }}
+          value-serializer: {{ .Values.spring.kafka.producer.valueSerializer }}
+          properties:
+            spring.json.add.type.headers: {{ .Values.spring.kafka.producer.properties.springJsonAddTypeHeaders }}
+      datasource:
+        url: {{ .Values.spring.datasource.url }}
+        driver-class-name: {{ .Values.spring.datasource.driverClassName }}
+        hikari:
+          connection-test-query: {{ .Values.spring.datasource.hikari.connectionTestQuery }}
+          validation-timeout: {{ .Values.spring.datasource.hikari.validationTimeout }}
+      jpa:
+        hibernate:
+          ddl-auto: {{ .Values.spring.jpa.hibernate.ddlAuto }}
+        generate-ddl: {{ .Values.spring.jpa.generateDdl }}
+        show-sql: {{ .Values.spring.jpa.showSql }}
+        open-in-view: {{ .Values.spring.jpa.openInView }}
+        properties:
+          hibernate:
+            dialect: {{ .Values.spring.jpa.properties.hibernate.dialect }}
+    user:
+      base-url: {{ .Values.user.baseUrl }}
+    asset:
+      base-url: {{ .Values.asset.baseUrl }}
+    product:
+      base-url: {{ .Values.product.baseUrl }}
+    blockchain:
+      base-url: {{ .Values.blockchain.baseUrl }}
+    escrow:
+      base-url: {{ .Values.escrow.baseUrl }}
+

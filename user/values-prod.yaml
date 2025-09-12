@@ -1,0 +1,47 @@
+replicaCount: 1
+image:
+  repository: (censored).dkr.ecr.ap-northeast-2.amazonaws.com/backend_user
+  tag: "0.7.3"
+  pullPolicy: Always
+service:
+  port: 8081
+containerPort: 8081
+env:
+  profiles: prod
+spring:
+  datasource:
+    url: jdbc:mariadb://cloud-rds.(censored).ap-northeast-2.rds.amazonaws.com:3306/user?serverTimezone=UTC&characterEncoding=UTF-8
+    username: admin
+    password: admin123!
+    driverClassName: org.mariadb.jdbc.Driver
+    hikari:
+      connectionTestQuery: SELECT 1
+      validationTimeout: 5000
+  jpa:
+    hibernate:
+      ddlAuto: none
+    showSql: true
+    generateDdl: true
+    openInView: false
+    databasePlatform: org.hibernate.dialect.MariaDBDialect
+  kafka:
+    boostrapServers: (censored):9092
+  kakao:
+    clientId: (censored)
+    redirectUri: https://(censored)/login/kakaoConfirm
+    clientSecret: (censored)
+    scope: account_email
+  cloud:
+    compatibilityVerifier:
+      enabled: false
+  data:
+    redis:
+      host: (censored)
+      port: 6379
+jwt:
+  expiresIn: 86400
+  mobileExpiresIn: 31536000
+  tabletExpiresIn: 31536000
+  secretKey: (censored)
+product:
+  baseUrl: http://backend-product-service:8083

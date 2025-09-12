@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-configmap
+data:
+  application-{{ .Values.env.profiles }}.yaml: |
+    server:
+      port: {{ .Values.service.port }}
+
+    spring:
+      datasource:
+        url: {{ .Values.spring.datasource.url }}
+        driver-class-name: {{ .Values.spring.datasource.driverClassName }}
+        hikari:
+          connection-test-query: {{ .Values.spring.datasource.hikari.connectionTestQuery }}
+          validation-timeout: {{ .Values.spring.datasource.hikari.validationTimeout }}
+      jpa:
+        hibernate:
+          ddl-auto: {{ .Values.spring.jpa.hibernate.ddlAuto }}
+        generate-ddl: {{ .Values.spring.jpa.generateDdl }}
+        show-sql: {{ .Values.spring.jpa.showSql }}
+        open-in-view: {{ .Values.spring.jpa.openInView }}
+        properties:
+          hibernate:
+            dialect: {{ .Values.spring.jpa.properties.hibernate.dialect }}
+    
+    external:
+      product-service:
+        url: {{ .Values.external.productService.url }}

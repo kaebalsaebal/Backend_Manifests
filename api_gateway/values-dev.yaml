@@ -1,0 +1,14 @@
+replicaCount: 1
+image:
+  repository: (censored):5000/api_gateway
+  tag: "0.3.5"
+  pullPolicy: Always
+service:
+  type: NodePort
+  port: 8080
+  nodePort: 30080
+containerPort: 8080
+env:
+  profiles: dev
+jwt:
+  secretKey: (censored)

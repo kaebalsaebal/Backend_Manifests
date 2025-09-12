@@ -1,0 +1,56 @@
+replicaCount: 1
+image:
+  repository: (censored):5000/backend_product
+  tag: "0.0.5"
+  pullPolicy: Always
+service:
+  port: 8083
+containerPort: 8083
+env:
+  profiles: dev
+spring:
+  kafka:
+    listener:
+      ackMode: manual_immediate
+    producer:
+      keySerializer: org.apache.kafka.common.serialization.StringSerializer
+      valueSerializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        springJsonAddTypeHeaders: false
+    bootstrapServers: (censored):9092 # Kafka URL
+  data:
+    mongodb:
+      host: (censored)
+      port: 27017
+      database: product-db
+      username: admin
+      password: admin
+      authenticationDatabase: test
+  #   socket-timeout: 10000
+  #   connect-timeout: 10000
+  cloud:
+    compatibilityVerifier:
+      enabled: false
+  servlet:
+    multipart:
+      maxFileSize: 500MB
+      maxRequestSize: 500MB
+asset:
+  baseUrl: http://backend-asset-service:8082
+escrow:
+  baseUrl: http://backend-escrow-service:8084
+smartContract:
+  baseUrl: http://backend-blockchain-connector-service:8085
+market:
+  baseUrl: http://backend-market-service:8086
+jwt:
+  secretKey: (censored)
+cloud:
+  aws:
+    credentials: (censored)
+      accessKey: (censored)
+      secretKey: (censored)
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: ddiring-cloud-bucket

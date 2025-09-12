@@ -1,0 +1,33 @@
+replicaCount: 1
+image:
+  repository: (censored):5000/backend_monitoring
+  tag: "0.0.5"
+  pullPolicy: Always
+service:
+  port: 8089
+containerPort: 8089
+env:
+  profiles: dev
+spring:
+  kafka:
+    producer:
+      bootstrapServers: (censored):9092 # Kafka URL
+  datasource:
+    url: jdbc:mariadb://(censored):3306/monitoring?serverTimezone=UTC&characterEncoding=UTF-8
+    username: admin
+    password: admin
+    driverClassName: org.mariadb.jdbc.Driver
+    hikari:
+      connectionTestQuery: SELECT 1
+      validationTimeout: 5000
+  jpa:
+    hibernate:
+      ddlAuto: none
+    generateDdl: true
+    showSql: true
+    openInView: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
+product:
+  baseUrl: http://backend-product-service:8083

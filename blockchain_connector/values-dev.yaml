@@ -1,0 +1,64 @@
+replicaCount: 1
+image:
+  repository: (censored):5000/backend_blockchain_connector
+  tag: "0.0.1"
+  pullPolicy: Always
+service:
+  port: 8085
+containerPort: 8085
+env:
+  profiles: dev
+spring:
+  kafka:
+    listener:
+      ackMode: manual_immediate
+    consumer:
+      keyDeserializer: org.apache.kafka.common.serialization.StringDeserializer
+      valueDeserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      enableAutoCommit: false
+      autoOffsetReset: latest
+      maxPollRecords: 10
+      properties:
+        springJsonTrustedPackages: "*"
+        springJsonUseTypeHeaders: false
+    producer:
+      keySerializer: org.apache.kafka.common.serialization.StringSerializer
+      valueSerializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        springJsonAddTypeHeaders: false
+    bootstrapServers: (censored):9092 # Kafka URL
+  datasource:
+    url: jdbc:mariadb://(censored):3306/blockchain?serverTimezone=UTC&characterEncoding=UTF-8
+    username: admin
+    password: admin
+    driverClassName: org.mariadb.jdbc.Driver
+    hikari:
+      connectionTestQuery: SELECT 1
+      validationTimeout: 5000
+  jpa:
+    hibernate:
+      ddlAuto: none
+    generateDdl: true
+    showSql: true
+    openInView: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
+jenkins:
+  url: (censored):8000 # Jenkins URL
+  job: job/backend-smartcontract-deploy
+  username: admin
+  apiToken: (censored)
+  authenticationToken: SECRET_TOKEN_FOR_DEPLOY
+blockchain:
+  admin:
+    key:
+      privateKey: (censored)
+  sepolia:
+    rpc:
+      url: wss://sepolia.infura.io/ws/v3/(censored)
+  etherscan:
+    api:
+      key: (censored)
+  web3j:
+    pollingInterval: 300000 # in milliseconds
