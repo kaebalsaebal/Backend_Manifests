@@ -11,7 +11,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/LG-CNS-2-FINAL-PROJECT-FINANCE/Backend_Manifests.git
+    repoURL: (레포지토리 주소).git
     targetRevision: master
     path: (각 폴더 이름)
     helm:
